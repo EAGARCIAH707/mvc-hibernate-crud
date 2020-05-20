@@ -12,5 +12,5 @@ public interface IEmployeeDAO {
 
     void delete(Integer id);
 
-    void findByDocNumber(Long docNumber);
+    Employee findByDocNumber(Long docNumber);
 }

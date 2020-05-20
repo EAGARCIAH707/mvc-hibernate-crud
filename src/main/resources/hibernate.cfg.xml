@@ -9,7 +9,6 @@
     <property name="hibernate.connection.username">sqbfmuuvlnycxa</property>
     <property name="hibernate.connection.password">0cc4e99367580a05d04ad1d08b3b3ac49e565c5bf33005635afad6f0450c8140</property>
     <property name="hibernate.show_sql">true</property>
-    <property name="connection.pool_size">10</property>
     <mapping class="com.andevs.taller.mvc.model.entities.Employee"/>
     <mapping class="com.andevs.taller.mvc.model.entities.Login"/>
   </session-factory>

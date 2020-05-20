@@ -32,13 +32,13 @@ public class EmployeeDAO implements IEmployeeDAO {
         employeeRepository.delete(id);
     }
 
-    public void findByDocNumber(Long docNumber) {
-
+    public Employee findByDocNumber(Long docNumber) {
+        return employeeRepository.findByDocNumber(docNumber);
     }
 
     private Employee getAttributes(Map<String, String> params) {
         Integer employeeId = null;
-        if (params.get("employeeId") != null) {
+        if (params.get("employeeId") != null && !params.get("employeeId").equals("")) {
             employeeId = Integer.parseInt(params.get("employeeId"));
         }
         Long documentNumber = Long.parseLong(params.get("documentNumber"));

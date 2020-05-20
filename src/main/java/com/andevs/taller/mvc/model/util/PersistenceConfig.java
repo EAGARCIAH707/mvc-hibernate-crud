@@ -1,15 +1,14 @@
 package com.andevs.taller.mvc.model.util;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 public class PersistenceConfig {
-    private static final SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
-    static {
+    private static void createSetSessionFactory() {
         try {
             Configuration configuration = new Configuration()
                     .configure();
@@ -24,6 +23,10 @@ public class PersistenceConfig {
     }
 
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            createSetSessionFactory();
+            return sessionFactory;
+        }
         return sessionFactory;
     }
 }

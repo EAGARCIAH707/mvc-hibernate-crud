@@ -11,7 +11,7 @@ public interface IEmployeeRepository {
 
     void delete(Integer id);
 
-    void findByDocNumber(Long docNumber);
+    Employee findByDocNumber(Long docNumber);
 
     Employee findById(Integer id);
 }
