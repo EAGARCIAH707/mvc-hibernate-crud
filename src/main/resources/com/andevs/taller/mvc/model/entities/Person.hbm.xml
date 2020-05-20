@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 may. 2020 16:08:50 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.andevs.taller.mvc.model.entities.Person" table="person" schema="public" optimistic-lock="version">
+        <id name="idPerson" type="int">
+            <column name="id_person" />
+            <generator class="assigned" />
+        </id>
+        <property name="documentNumber" type="long">
+            <column name="document_number" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" length="50" />
+        </property>
+        <property name="weight" type="big_decimal">
+            <column name="weight" precision="5" />
+        </property>
+        <property name="height" type="big_decimal">
+            <column name="height" precision="5" />
+        </property>
+        <property name="createdOn" type="timestamp">
+            <column name="created_on" length="29" not-null="true" />
+        </property>
+        <property name="lastModified" type="timestamp">
+            <column name="last_modified" length="29" not-null="true" />
+        </property>
+        <set name="logins" table="login" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_person" not-null="true" />
+            </key>
+            <one-to-many class="com.andevs.taller.mvc.model.entities.Login" />
+        </set>
+    </class>
+</hibernate-mapping>

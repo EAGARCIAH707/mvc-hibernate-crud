@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 may. 2020 16:08:50 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.andevs.taller.mvc.model.entities.Employee" table="employee" schema="public" optimistic-lock="version">
+        <id name="employeeId" type="int">
+            <column name="employee_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="documentNumber" type="long">
+            <column name="document_number" not-null="true" unique="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" length="50" not-null="true" />
+        </property>
+        <property name="surname" type="string">
+            <column name="surname" length="30" not-null="true" />
+        </property>
+        <property name="secondSurname" type="string">
+            <column name="second_surname" length="30" />
+        </property>
+        <property name="phone" type="string">
+            <column name="phone" length="15" />
+        </property>
+        <property name="cretaedOn" type="timestamp">
+            <column name="cretaed_on" length="29" not-null="true" />
+        </property>
+        <property name="lastModified" type="timestamp">
+            <column name="last_modified" length="29" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

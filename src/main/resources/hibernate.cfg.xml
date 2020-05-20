@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://ec2-3-231-16-122.compute-1.amazonaws.com:5432/dfv1kf82slv5f1</property>
+    <property name="hibernate.connection.username">sqbfmuuvlnycxa</property>
+    <property name="hibernate.connection.password">0cc4e99367580a05d04ad1d08b3b3ac49e565c5bf33005635afad6f0450c8140</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="connection.pool_size">10</property>
+    <mapping class="com.andevs.taller.mvc.model.entities.Employee"/>
+    <mapping class="com.andevs.taller.mvc.model.entities.Login"/>
+  </session-factory>
+
+
+</hibernate-configuration>
