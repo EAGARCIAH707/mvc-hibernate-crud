@@ -2,6 +2,7 @@ package com.andevs.taller.mvc.model.dao.employee;
 
 import com.andevs.taller.mvc.model.entities.Employee;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IEmployeeDAO {
@@ -10,7 +11,9 @@ public interface IEmployeeDAO {
 
     Boolean update(Map<String, String> properties);
 
-    void delete(Integer id);
+    Boolean delete(Integer id);
 
     Employee findByDocNumber(Long docNumber);
+
+    List<Employee> findAll();
 }

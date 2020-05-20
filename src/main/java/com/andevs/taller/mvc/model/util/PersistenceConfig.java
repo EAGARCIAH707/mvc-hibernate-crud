@@ -1,5 +1,6 @@
 package com.andevs.taller.mvc.model.util;
 
+import com.andevs.taller.mvc.model.util.log.LogUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -17,7 +18,7 @@ public class PersistenceConfig {
                     .build();
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         } catch (Throwable ex) {
-            System.err.println("Initial SessionFactory creation failed." + ex);
+            LogUtil.writeInLog("Initial SessionFactory creation failed." + ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
     }

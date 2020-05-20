@@ -2,9 +2,13 @@ package com.andevs.taller.mvc.model.repository.employee;
 
 import com.andevs.taller.mvc.model.entities.Employee;
 import com.andevs.taller.mvc.model.util.PersistenceConfig;
+import com.andevs.taller.mvc.model.util.log.LogUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeRepository implements IEmployeeRepository {
     private Session session;
@@ -30,7 +34,7 @@ public class EmployeeRepository implements IEmployeeRepository {
         } catch (HibernateException e) {
             exceptionHandler(e);
         } catch (Exception e) {
-            System.out.println("Error in save() " + e.getMessage());
+            LogUtil.writeInLog("Error in save() " + e.getMessage());
         } finally {
             session.close();
         }
@@ -47,37 +51,40 @@ public class EmployeeRepository implements IEmployeeRepository {
         } catch (HibernateException e) {
             exceptionHandler(e);
         } catch (Exception e) {
-            System.out.println("Error in update() " + e.getMessage());
+            LogUtil.writeInLog("Error in update() " + e.getMessage());
         } finally {
             session.close();
         }
         return Boolean.FALSE;
     }
 
-    public void delete(Integer id) {
+    public Boolean delete(Integer id) {
         try {
             Employee employee = findById(id);
             initSession();
             session.delete(employee);
-            session.getTransaction().commit();
+            commitTransaction();
+            return Boolean.TRUE;
         } catch (HibernateException e) {
             exceptionHandler(e);
         } catch (Exception e) {
-            System.out.println("Error in update() " + e.getMessage());
+            LogUtil.writeInLog("Error in delete() " + e.getMessage());
         } finally {
             session.close();
         }
+        return Boolean.FALSE;
     }
 
     public Employee findByDocNumber(Long documentNumber) {
         try {
             initSession();
-
-            Object id = session.byNaturalId(Employee.class).using("documentNumber", documentNumber).load();
+            Object employee = session.byNaturalId(Employee.class)
+                    .using("documentNumber", documentNumber)
+                    .load();
             commitTransaction();
-            return (Employee) id;
+            return (Employee) employee;
         } catch (Exception e) {
-            System.out.println("Error in findByDocNumber ".concat(e.getMessage()));
+            LogUtil.writeInLog("Error in findByDocNumber ".concat(e.getMessage()));
         }
         return Employee.builder().build();
     }
@@ -87,13 +94,31 @@ public class EmployeeRepository implements IEmployeeRepository {
             initSession();
             return (Employee) session.get(Employee.class, employeeId);
         } catch (Exception e) {
-            System.out.println("Error in findById ".concat(e.getMessage()));
+            LogUtil.writeInLog("Error in findById ".concat(e.getMessage()));
         }
         return Employee.builder().build();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Employee> findAll() {
+        try {
+            initSession();
+            List<Employee> employeeList = session.createCriteria(Employee.class).list();
+            commitTransaction();
+            return employeeList;
+        } catch (HibernateException e) {
+            exceptionHandler(e);
+        } catch (Exception e) {
+            LogUtil.writeInLog("Error in findAll() " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return new ArrayList<>();
+    }
+
     private void exceptionHandler(HibernateException e) {
         session.getTransaction().rollback();
-        System.out.println("Error in EmployeeRepository ".concat(e.getMessage()));
+        LogUtil.writeInLog("Error in EmployeeRepository ".concat(e.getMessage()));
     }
 }

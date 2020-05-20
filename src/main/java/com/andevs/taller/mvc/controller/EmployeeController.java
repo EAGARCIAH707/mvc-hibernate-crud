@@ -3,7 +3,10 @@ package com.andevs.taller.mvc.controller;
 import com.andevs.taller.mvc.model.dao.employee.EmployeeDAO;
 import com.andevs.taller.mvc.model.dao.employee.IEmployeeDAO;
 import com.andevs.taller.mvc.model.entities.Employee;
+import com.andevs.taller.mvc.model.util.log.LogUtil;
 import com.andevs.taller.mvc.view.employee.EmployeeView;
+import com.andevs.taller.mvc.view.log.LogView;
+import com.andevs.taller.mvc.view.table.EmployeeTableView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +27,7 @@ public class EmployeeController implements ActionListener {
         Boolean result = employeeDAO.create(getFormValues());
         if (result) {
             JOptionPane.showMessageDialog(null, "Registro creado con exito");
+            cleanAfterExecute();
         } else {
             JOptionPane.showMessageDialog(null, "No fue posible crear",
                     "Alerta", JOptionPane.WARNING_MESSAGE);
@@ -31,18 +35,56 @@ public class EmployeeController implements ActionListener {
     }
 
     private void update() {
-        Boolean result = employeeDAO.update(getFormValues());
-        if (result) {
-            JOptionPane.showMessageDialog(null, "Registro actualizado con exito");
+        try {
+            Integer.parseInt(employeeView.getIdLabel().getText());
+            Boolean result = employeeDAO.update(getFormValues());
+            if (result) {
+                JOptionPane.showMessageDialog(null, "Registro actualizado con exito");
+                cleanAfterExecute();
 
-        } else {
-            JOptionPane.showMessageDialog(null, "No fue posible actualizar",
-                    "Alerta", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No fue posible actualizar",
+                        "Alerta", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            String message = "Para actualizar es necesario consultar primero\n " +
+                    "Esto con el fin de garantizar informacion reciente";
+            JOptionPane.showMessageDialog(null, message, "Alerta",
+                    JOptionPane.WARNING_MESSAGE);
+            LogUtil.writeInLog("find the employee first before updating");
+
+        } catch (Exception e) {
+            LogUtil.writeInLog("Error in update() ".concat(e.getMessage()));
         }
+
+
     }
 
     private void delete() {
-        employeeDAO.delete(1);
+        try {
+            Integer id = Integer.parseInt(employeeView.getIdLabel().getText());
+            Boolean result = employeeDAO.delete(id);
+            if (result) {
+                JOptionPane.showMessageDialog(null, "Registro eliminado con exito");
+                cleanAfterExecute();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No fue posible eliminar",
+                        "Alerta", JOptionPane.WARNING_MESSAGE);
+                LogUtil.writeInLog("Not is possible delete ");
+            }
+        } catch (NumberFormatException e) {
+            String message = "Para eliminar es necesario consultar primero\n " +
+                    "Esto con el fin de garantizar informacion reciente";
+            JOptionPane.showMessageDialog(null, message, "Alerta",
+                    JOptionPane.WARNING_MESSAGE);
+            LogUtil.writeInLog("look for the employee first before removing");
+
+        } catch (Exception e) {
+            LogUtil.writeInLog("Error in delete() ".concat(e.getMessage()));
+        }
+
     }
 
     private void read() {
@@ -53,11 +95,18 @@ public class EmployeeController implements ActionListener {
                 writeDataInForm(employee);
             }
         } catch (Exception e) {
-            System.out.println("Error in read ".concat(e.getMessage()));
+            JOptionPane.showMessageDialog(null, "No fue posible consultar",
+                    "Alerta", JOptionPane.WARNING_MESSAGE);
+            LogUtil.writeInLog("Not is possible find ");
         }
     }
 
     private void readAll() {
+        EmployeeTableView employeeTableView = new EmployeeTableView();
+        TableEmployeeController controller = new TableEmployeeController(employeeTableView);
+        employeeTableView.addController(controller);
+        employeeTableView.setVisible(true);
+        employeeTableView.setLocationRelativeTo(null);
     }
 
     private Map<String, String> getFormValues() {
@@ -68,6 +117,7 @@ public class EmployeeController implements ActionListener {
         values.put("surname", employeeView.getSurnameField().getText());
         values.put("secondSurname", employeeView.getSurname2Field().getText());
         values.put("phone", employeeView.getPhoneField().getText());
+        values.put("cretaedOn", employeeView.getCreatedOnField().getText());
         return values;
     }
 
@@ -86,13 +136,27 @@ public class EmployeeController implements ActionListener {
 
     private void cleanForm() {
         employeeView.getIdLabel().setText("");
-        employeeView.getDocNumberLabel().setText("");
-        employeeView.getNameLabel().setText("");
-        employeeView.getSurnameLabel().setText("");
-        employeeView.getSurname2Label().setText("");
-        employeeView.getPhoneLabel().setText("");
+        employeeView.getDocNumberField().setText("");
+        employeeView.getNameField().setText("");
+        employeeView.getSurnameField().setText("");
+        employeeView.getSurname2Field().setText("");
+        employeeView.getPhoneField().setText("");
         employeeView.getCreatedOnField().setText("");
-        employeeView.getLastModifiedLabel().setText("");
+        employeeView.getLastModifiedField().setText("");
+    }
+
+    private void cleanAfterExecute() {
+        if (employeeView.getCleanAfterCheckBox().isSelected()) {
+            cleanForm();
+        }
+    }
+
+    private void renderedLogs() {
+        LogView logView = new LogView();
+        LogController logController = new LogController(logView);
+        logView.addController(logController);
+        logView.setVisible(true);
+        logView.setLocationRelativeTo(null);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -114,5 +178,13 @@ public class EmployeeController implements ActionListener {
         if (e.getSource().equals(employeeView.getCleanButton())) {
             cleanForm();
         }
+        if (e.getSource().equals(employeeView.getExitButton())) {
+            employeeView.dispose();
+        }
+        if (e.getSource().equals(employeeView.getErrorsLogs())) {
+            renderedLogs();
+        }
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.andevs.taller.mvc.model.repository.login;
 
 import com.andevs.taller.mvc.model.util.PersistenceConfig;
+import com.andevs.taller.mvc.model.util.log.LogUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -33,7 +34,7 @@ public class LoginRepository implements ILoginRepository {
                 return Boolean.TRUE;
             }
         } catch (Exception e) {
-            System.out.println("Error in login " + e.getMessage());
+            LogUtil.writeInLog("Error in login " + e.getMessage());
         } finally {
             session.close();
         }
