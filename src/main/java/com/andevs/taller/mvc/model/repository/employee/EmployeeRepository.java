@@ -85,6 +85,8 @@ public class EmployeeRepository implements IEmployeeRepository {
             return (Employee) employee;
         } catch (Exception e) {
             LogUtil.writeInLog("Error in findByDocNumber ".concat(e.getMessage()));
+        } finally {
+            session.close();
         }
         return Employee.builder().build();
     }
@@ -95,6 +97,9 @@ public class EmployeeRepository implements IEmployeeRepository {
             return (Employee) session.get(Employee.class, employeeId);
         } catch (Exception e) {
             LogUtil.writeInLog("Error in findById ".concat(e.getMessage()));
+        }finally {
+            commitTransaction();
+            session.close();
         }
         return Employee.builder().build();
     }

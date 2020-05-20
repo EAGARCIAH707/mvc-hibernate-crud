@@ -24,7 +24,7 @@ public class TableEmployeeController implements ActionListener {
     private void tableWrite() {
         List<Employee> employeeList = employeeDAO.findAll();
         String[][] data = new String[employeeList.size()][8];
-        String header[] = {"Id", "Documento", "Nombre", "Apellido1", "Apellido2", "Telefono", "Creado", "Actualizado"};
+        String[] header = {"Id", "Documento", "Nombre", "Apellido1", "Apellido2", "Telefono", "Creado", "Actualizado"};
         int i = 0;
         for (Employee employee : employeeList) {
             try {

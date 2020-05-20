@@ -1,6 +1,7 @@
 package com.andevs.taller.mvc.controller;
 
 import com.andevs.taller.mvc.model.dao.login.LoginDAO;
+import com.andevs.taller.mvc.model.util.log.LogUtil;
 import com.andevs.taller.mvc.view.employee.EmployeeView;
 import com.andevs.taller.mvc.view.login.LoginView;
 
@@ -52,7 +53,7 @@ public class LoginController implements ActionListener {
                 showPass();
             }
         } catch (Exception ex) {
-            System.out.println("Error in loginController " + ex.getMessage());
+            LogUtil.writeInLog("Error in loginController " + ex.getMessage());
         }
     }
 }

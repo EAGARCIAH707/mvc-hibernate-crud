@@ -46,7 +46,6 @@ public class EmployeeController implements ActionListener {
                 JOptionPane.showMessageDialog(null, "No fue posible actualizar",
                         "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-
         } catch (NumberFormatException e) {
             String message = "Para actualizar es necesario consultar primero\n " +
                     "Esto con el fin de garantizar informacion reciente";
@@ -57,8 +56,6 @@ public class EmployeeController implements ActionListener {
         } catch (Exception e) {
             LogUtil.writeInLog("Error in update() ".concat(e.getMessage()));
         }
-
-
     }
 
     private void delete() {
